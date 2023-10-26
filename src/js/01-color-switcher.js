@@ -2,7 +2,7 @@ const root = document.querySelector('body');
 const startBtn = document.querySelector('button[data-start]');
 const stopBtn = document.querySelector('button[data-stop]');
 
-notActiveBtn(stopBtn);
+changeBtnState(startBtn, stopBtn);
 
 root.addEventListener('click', changeColor);
 
@@ -10,8 +10,7 @@ let intervalId;
 
 function changeColor({ target }) {
   if (target.dataset.start === '') {
-      activeBtn(stopBtn);
-      notActiveBtn(startBtn);
+      changeBtnState(stopBtn, startBtn);
     return (intervalId = setInterval(() => {
       const currentCollor = getRandomHexColor();
       root.style.backgroundColor = currentCollor;
@@ -19,19 +18,16 @@ function changeColor({ target }) {
   }
   if (target.dataset.stop === '') {
       clearInterval(intervalId);
-      activeBtn(startBtn);
-      notActiveBtn(stopBtn);
+      changeBtnState(startBtn, stopBtn);
   }
 }
 
-function notActiveBtn(btn) {
-  btn.style.pointerEvents = 'none';
-  btn.style.color = 'grey';
-}
 
-function activeBtn(btn) {
-  btn.style.pointerEvents = 'auto';
-  btn.style.color = 'black';
+function changeBtnState(activeBtn, disableBtn) {
+  activeBtn.style.pointerEvents = 'auto';
+  activeBtn.style.color = 'black';
+  disableBtn.style.pointerEvents = 'none';
+  disableBtn.style.color = 'grey';
 }
 
 function getRandomHexColor() {
