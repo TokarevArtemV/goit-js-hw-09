@@ -16,8 +16,8 @@ const optionsToFlatpickr = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    time = new Date(selectedDates[0]).getTime();
-    clockFace.setTimer(time);
+    selectedTime = new Date(selectedDates[0]).getTime();
+    clockFace.setTimer(selectedTime);
   },
 };
 
@@ -58,6 +58,7 @@ class ClockFace {
   }
 
   start() {
+    this.disableBtnState(refs.startBtn);
     if (this.timerIsActive) {
       return;
     }
@@ -69,7 +70,7 @@ class ClockFace {
 
   setTimer(time) {
     this.timerData = time;
-    if (time <= Date.now()) {
+    if (this.timerData <= Date.now()) {
       this.disableBtnState(this.startBtn);
       if (!this.timerIsActive) {
         Notify.info('Please choose a date in the future');
@@ -81,22 +82,18 @@ class ClockFace {
       }
     }
     this.enableBtnState(this.startBtn);
-    const timerTime = ClockFace.convertMsToTime(time - Date.now());
-    this.render(timerTime);
+    this.render(ClockFace.convertMsToTime(time - Date.now()));
   }
 
   changeTimer(time) {
     if (time <= Date.now()) {
       this.disableBtnState(refs.startBtn);
-
       this.timerIsActive = false;
       Notify.success('Timer is over');
       clearInterval(this.intervalId);
       return;
     }
-    this.enableBtnState(refs.startBtn);
-    const timerTime = ClockFace.convertMsToTime(time - Date.now());
-    this.render(timerTime);
+    this.render(ClockFace.convertMsToTime(time - Date.now()));
   }
 }
 
