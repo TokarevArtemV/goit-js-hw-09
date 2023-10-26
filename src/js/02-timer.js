@@ -3,34 +3,39 @@ import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/material_blue.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-let intervalId;
-let timerData;
-let timerIsActive = false;
-
 refs = {
   input: document.querySelector('input#datetime-picker'),
   startBtn: document.querySelector('button[data-start]'),
   clockContainer: document.querySelector('.timer'),
-  options: {
-    enableTime: true,
-    dateFormat: 'd-m-Y H:i',
-    time_24hr: true,
-    defaultDate: new Date(),
-    minuteIncrement: 1,
-    onClose(selectedDates) {
-      timerData = new Date(selectedDates[0]).getTime();
-      changeTimer(timerData);
-    },
+};
+
+const optionsToFlatpickr = {
+  enableTime: true,
+  dateFormat: 'd-m-Y H:i',
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    timerData = new Date(selectedDates[0]).getTime();
+    changeTimer(timerData);
   },
 };
 
-refs.startBtn.addEventListener('click', timer);
 
-flatpickr(refs.input, refs.options);
+class ClockFace {
+    
+}
 
+
+
+let intervalId;
+let timerData;
+let timerIsActive = false;
+
+flatpickr(refs.input, optionsToFlatpickr);
 disableBtnState(refs.startBtn);
 
-function timer() {
+refs.startBtn.addEventListener('click', () => {
   if (timerIsActive) {
     return;
   }
@@ -38,19 +43,24 @@ function timer() {
     changeTimer(timerData);
   }, 1000);
   timerIsActive = true;
-}
+});
 
 function changeTimer(time) {
   if (time <= Date.now()) {
     disableBtnState(refs.startBtn);
-    !timerIsActive
-      ? Notify.info('Please choose a date in the future')
-      : ((timerIsActive = false), Notify.success('Timer is over'));
+    if (!timerIsActive) {
+      Notify.info('Please choose a date in the future');
+    } else {
+        timerIsActive = false;
+        Notify.success('Timer is over');
+      }
+      
     clearInterval(intervalId);
     return;
   }
   enableBtnState(refs.startBtn);
-  renderTime(convertMsToTime(time - Date.now()));
+  const timerTime = convertMsToTime(time - Date.now());
+  renderTime(timerTime);
 }
 
 function renderTime(time) {
@@ -68,9 +78,6 @@ function enableBtnState(activeBtn) {
   activeBtn.style.color = 'black';
 }
 
-function padTo2Digits(num) {
-  return num.toString().padStart(2, '0');
-}
 function convertMsToTime(milliseconds) {
   let seconds = Math.floor(milliseconds / 1000);
   let minutes = Math.floor(seconds / 60);
@@ -83,4 +90,7 @@ function convertMsToTime(milliseconds) {
   day = padTo2Digits(day);
 
   return [day, hours, minutes, seconds];
+}
+function padTo2Digits(num) {
+  return num.toString().padStart(2, '0');
 }
