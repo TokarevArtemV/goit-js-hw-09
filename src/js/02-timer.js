@@ -93,7 +93,7 @@ class ClockFace {
 
   changeTimer(time) {
     if (time <= Date.now()) {
-      this.disableBtnState(refs.startBtn);
+      this.disableBtnState(this.startBtn);
       this.timerIsActive = false;
       Notify.success('Timer is over', {
         timeout: 6000,
