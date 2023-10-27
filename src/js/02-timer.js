@@ -17,6 +17,7 @@ const optionsToFlatpickr = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     selectedTime = new Date(selectedDates[0]).getTime();
+    
     clockFace.setTimer(selectedTime);
   },
 };
@@ -82,7 +83,7 @@ class ClockFace {
       }
     }
     this.enableBtnState(this.startBtn);
-    this.render(ClockFace.convertMsToTime(time - Date.now()));
+    // this.render(ClockFace.convertMsToTime(time - Date.now()));
   }
 
   changeTimer(time) {
