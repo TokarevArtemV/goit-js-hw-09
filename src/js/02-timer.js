@@ -74,7 +74,12 @@ class ClockFace {
     if (this.timerData <= Date.now()) {
       this.disableBtnState(this.startBtn);
       if (!this.timerIsActive) {
-        Notify.info('Please choose a date in the future');
+        Notify.warning('Please choose a date in the future', {
+          timeout: 6000,
+          width: '350px',
+          position: 'center-center',
+          fontSize: '16px',
+        });
         this.render(['00', '00', '00', '00']);
         return;
       } else {
@@ -83,14 +88,19 @@ class ClockFace {
       }
     }
     this.enableBtnState(this.startBtn);
-    // this.render(ClockFace.convertMsToTime(time - Date.now()));
+    this.render(ClockFace.convertMsToTime(time - Date.now()));
   }
 
   changeTimer(time) {
     if (time <= Date.now()) {
       this.disableBtnState(refs.startBtn);
       this.timerIsActive = false;
-      Notify.success('Timer is over');
+      Notify.success('Timer is over', {
+        timeout: 6000,
+        width: '300px',
+        position: 'center-center',
+        fontSize: '16px',
+      });
       clearInterval(this.intervalId);
       return;
     }
