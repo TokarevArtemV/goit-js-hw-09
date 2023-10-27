@@ -16,7 +16,7 @@ const optionsToFlatpickr = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    selectedTime = new Date(selectedDates[0]).getTime();
+  const selectedTime = new Date(selectedDates[0]).getTime();
     
     clockFace.setTimer(selectedTime);
   },
