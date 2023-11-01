@@ -59,7 +59,7 @@ class ClockFace {
   }
 
   start() {
-    this.disableBtnState(refs.startBtn);
+    this.disableBtnState(this.startBtn);
     if (this.timerIsActive) {
       return;
     }
